@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h2 class="mb-4">Your Gym Routines</h2>
+
+{% if routines %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for routine in routines %}
+      <div class="col">
+        <div class="card h-100">
+          <img src="{{ file_location }}/{{ routine.image }}" class="card-img-top" alt="Routine Image">
+          <div class="card-body">
+            <h5 class="card-title">{{ routine.name }}</h5>
+            <p class="card-text">
+              <strong>Target Area:</strong> {{ routine.target }}<br>
+              <strong>Duration:</strong> {{ routine.duration }} minutes
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No routines saved yet. <a href="/add">Add a new one here!</a></p>
+{% endif %}
+{% endblock %}
