@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Add a New Routine</h2>
+
+<form method="POST" action="/add" enctype="multipart/form-data">
+  <label for="name">Routine Name:</label><br>
+  <input type="text" id="name" name="name" required><br><br>
+
+  <label for="muscle_group">Target Muscle Group:</label><br>
+  <input type="text" id="muscle_group" name="muscle_group" required><br><br>
+
+  <label for="difficulty">Difficulty (e.g. Easy, Medium, Hard):</label><br>
+  <input type="text" id="difficulty" name="difficulty" required><br><br>
+
+  <label for="description">Description:</label><br>
+  <textarea id="description" name="description" required></textarea><br><br>
+
+  <label for="image">Upload Image (optional):</label><br>
+  <input type="file" id="image" name="image"><br><br>
+
+  <input type="submit" value="Add Routine">
+</form>
+{% endblock %}
