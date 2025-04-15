@@ -3,22 +3,76 @@
 {% block content %}
 <h2>Add a New Routine</h2>
 
-<form method="POST" action="/add" enctype="multipart/form-data">
-  <label for="name">Routine Name:</label><br>
-  <input type="text" id="name" name="name" required><br><br>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="/add" enctype="multipart/form-data" id="routineForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Routine Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
 
-  <label for="muscle_group">Target Muscle Group:</label><br>
-  <input type="text" id="muscle_group" name="muscle_group" required><br><br>
+                    <div class="mb-3">
+                        <label for="muscle_group" class="form-label">Target Muscle Group:</label>
+                        <input type="text" class="form-control" id="muscle_group" name="muscle_group" required>
+                    </div>
 
-  <label for="difficulty">Difficulty (e.g. Easy, Medium, Hard):</label><br>
-  <input type="text" id="difficulty" name="difficulty" required><br><br>
+                    <div class="mb-3">
+                        <label for="difficulty" class="form-label">Difficulty:</label>
+                        <select class="form-select" id="difficulty" name="difficulty" required>
+                            <option value="" disabled selected>Select difficulty level</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
 
-  <label for="description">Description:</label><br>
-  <textarea id="description" name="description" required></textarea><br><br>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description:</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                    </div>
 
-  <label for="image">Upload Image (optional):</label><br>
-  <input type="file" id="image" name="image"><br><br>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload Image:</label>
+                        <input type="file" class="form-control" id="image" name="image">
+                        <div class="form-text">Optional</div>
+                    </div>
 
-  <input type="submit" value="Add Routine">
-</form>
+                    <button type="submit" class="btn btn-primary">Add Routine</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Simple form validation
+    document.getElementById('routineForm').addEventListener('submit', function(event) {
+        const name = document.getElementById('name').value.trim();
+        const muscleGroup = document.getElementById('muscle_group').value.trim();
+        const difficulty = document.getElementById('difficulty').value;
+        const description = document.getElementById('description').value.trim();
+
+        if (!name || !muscleGroup || !difficulty || !description) {
+            alert('Please fill out all required fields');
+            event.preventDefault();
+        }
+
+        // Image validation
+        const image = document.getElementById('image');
+        if (image.files.length > 0) {
+            const file = image.files[0];
+            const validExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+            const fileExt = file.name.split('.').pop().toLowerCase();
+
+            if (!validExtensions.includes(fileExt)) {
+                alert('Only PNG, JPG, JPEG and GIF files are allowed');
+                event.preventDefault();
+            }
+        }
+    });
+</script>
 {% endblock %}

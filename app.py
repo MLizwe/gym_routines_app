@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import os
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # Needed to use sessions
+app.secret_key = "supersecretkey"
 
 # Folder for uploaded images
 UPLOAD_FOLDER = 'static/uploads'
