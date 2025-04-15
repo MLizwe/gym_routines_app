@@ -1,19 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
-import os,csv
+from flask import Flask, render_template, request, redirect, url_for, session
+import os
 
 app = Flask(__name__)
-
-# Sample data (temporary in-memory list)
-routines = [
-    {"name": "Chest Day", "exercises": ["Bench Press", "Push Ups", "Cable Fly"], "image": "chest.jpg"},
-    {"name": "Leg Day", "exercises": ["Squats", "Lunges", "Leg Press"], "image": "legs.jpg"}
-]
+app.secret_key = "supersecretkey"  # Needed to use sessions
 
 # Folder for uploaded images
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 # Check if uploaded file has a valid extension
 def allowed_file(filename):
@@ -22,24 +16,8 @@ def allowed_file(filename):
 
 @app.route("/")
 def home():
-    routines = []
-
-    if os.path.exists("routines.csv"):
-        with open ("routines.csv", newline="") as f:
-            reader = csv.reader(f)
-            for row in reader:
-                if len(row) >= 5:
-                    routines.append({
-                        "name": row[0],
-                        "muscle_group": row[1],
-                        "difficulty": row[2],
-                        "description": row[3],
-                        "image": row[4]
-                    })
-
+    routines = session.get("routines", [])
     return render_template("routines.html", routines=routines)
-
-
 
 
 @app.route("/add", methods=["GET", "POST"])
@@ -52,13 +30,21 @@ def add():
         image = request.files["image"]
 
         image_filename = ""
-        if image:
+        if image and allowed_file(image.filename):
             image_filename = image.filename
-            image.save(os.path.join("static/uploads", image_filename))
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
 
-        with open("routines.csv", "a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([name, muscle_group, difficulty, description, image_filename])
+        # Get existing routines or start new
+        routines = session.get("routines", [])
+        routines.append({
+            "name": name,
+            "muscle_group": muscle_group,
+            "difficulty": difficulty,
+            "description": description,
+            "image": image_filename
+        })
+
+        session["routines"] = routines  # Save back to session
 
         return redirect(url_for("home"))
 
@@ -66,6 +52,5 @@ def add():
 
 
 if __name__ == "__main__":
-    # Make sure the upload folder exists
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     app.run(debug=True)
