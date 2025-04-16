@@ -19,6 +19,15 @@ def home():
     routines = session.get("routines", [])
     return render_template("routines.html", routines=routines)
 
+@app.route("/delete")
+def delete():
+    name = request.args.get("name")
+    if name:
+        routines = session.get("routines", [])
+        routines = [r for r in routines if r["name"] != name]
+        session["routines"] = routines
+    return redirect(url_for("home"))
+
 
 @app.route("/add", methods=["GET", "POST"])
 def add():
