@@ -1,0 +1,9 @@
+This is my Gym Routines Flask project.
+It allows users to add personalized workout routines by entering the name of the workout, selecting its difficulty level, writing a description of how it is done, and uploading an image of the workout.
+Users can view all their added routines in a clean layout and also have the option to remove a workout if needed.
+The app is simple, user-friendly, and runs locally through Flask.
+
+Below is my git hub repository
+https://github.com/MLizwe/gym_routines_app.git
+
+In the images folder i have also put in the image with my AWS web screenshot.
